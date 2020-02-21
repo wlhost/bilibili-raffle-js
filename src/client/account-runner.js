@@ -328,8 +328,8 @@
             if (this.usable === false) return null;
 
             (Promise.all([
-                Bilibili.appGetInfoByUser(this.session, { roomid }).catch(console.log),
-                Bilibili.webGetInfoByUser(this.session, { roomid }).catch(console.log),
+                Bilibili.appGetInfoByUser(this.session, { roomid }).catch(() => {}),
+                Bilibili.webGetInfoByUser(this.session, { roomid }).catch(() => {}),
             ])
                 .then(() => {
                     return Bilibili.webLiveOnlineHeart(this.session, { roomid });
@@ -578,7 +578,7 @@
                     good = true;
                 }
                 else if (msg.includes('已经领取')) {
-                    message = '亿圆已领取';
+                    message = message || '亿圆已领取';
                     color = colors.green;
                     good = true;
                 }
@@ -592,7 +592,7 @@
                         quit = quit || (new Date().valueOf() - start > quitAfter);
                     }
                     const results = await Promise.all(tasks);
-                    results.some(response => isDone(response));
+                    results.every(response => isDone(response));
                     message = message || `风暴 ${storm.id} 领取失败`;
                 }
                 catch (error) {
